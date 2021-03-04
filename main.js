@@ -377,7 +377,9 @@ async function groupMsg(e, context) {
   } else if (global.config.bot.repeat.enable) {
     // 复读（
     // 随机复读，rptLog得到当前复读次数
-    if (
+    if (context.message ==null ||context.message.indexOf("bot") !== -1||context.message.indexOf("aww") !== -1||context.message.indexOf("CQ:image") !== -1){
+
+    }else if (
       logger.rptLog(group_id, user_id, context.message) >= global.config.bot.repeat.times &&
       getRand() <= global.config.bot.repeat.probability
     ) {

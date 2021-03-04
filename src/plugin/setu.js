@@ -74,6 +74,29 @@ function sendSetu(context, logger) {
     const regGroup = setuRegExec.groups || {};
     const r18 =
       regGroup.r18 && !(context.group_id && setting.r18OnlyInWhite && !setting.whiteGroup.includes(context.group_id));
+
+
+	switch(regGroup.keyword) {
+     case '绿酱':
+        regGroup.keyword = 'loli'
+        break;
+     case '村长':
+        regGroup.keyword = 'Reimu'
+        break;
+     case '马哥':
+        regGroup.keyword = 'Granblue'
+        break;
+     case '小狼':
+        regGroup.keyword = 'Holo'
+        break;
+	 case '喻武':
+        regGroup.keyword = 'hantai'
+        break;
+     default:
+
+	}
+
+
     const keyword = (regGroup.keyword && `&keyword=${encodeURIComponent(regGroup.keyword)}`) || false;
 
     // 群聊还是私聊
@@ -100,7 +123,7 @@ function sendSetu(context, logger) {
     }
 
     Axios.get(
-      `${zza}?r18=${r18 ? 1 : 0}${keyword || ''}${setting.size1200 ? '&size1200' : ''}${
+      `${zza}?r18=0${keyword || ''}${setting.size1200 ? '&size1200' : ''}${
         setting.apikey ? '&apikey=' + setting.apikey.trim() : ''
       }`
     )
@@ -118,6 +141,13 @@ function sendSetu(context, logger) {
           proxy === ''
             ? getProxyURL(ret.file)
             : new URL(/(?<=https:\/\/i.pximg.net\/).+/.exec(ret.file)[0], proxy).toString();
+
+        replyFunc(context, `${url} (p${ret.p})`, true);
+
+		if(ret.r18||ret.r18==true||ret.r18=='true'||r18==1||r18=='1'){
+		   replyFunc(context, '想看的自己去看吧，φ(>ω<*) ');
+		   return true;
+		}
 
         // 反和谐
         const base64 = await getAntiShieldingBase64(url).catch(e => {
